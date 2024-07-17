@@ -36,21 +36,23 @@
               <div class="flip-card">
                 <div class="flip-card-inner">
                   <div class="flip-card-front">
-                    <h3>Word:</h3>
-                    <p class="word"></p>
+                    <div id="card-front">
+                      <h1></h1>
+                    </div>
                   </div>
-                  <div class="flip-card-back">
-                    <h3>Definition:</h3>
-                    <p class="'definition"></p>
+                  <div class="flip-card-back" id="card-back">
+                    <div>
+                      <h1></h1>
+                      <p><b>Описание:</b> <span></span></p>
+                    </div>
                   </div>
                 </div>
               </div>
-                </div>
-              </div>
+            </div>
             <div class="slider-controls">
-              <button id="prev-btn" type="button" disabled>◀️</button>
+              <button id="back" type="button" disabled>◀️</button>
               <button id="exam" type="button">Тестирование</button>
-              <button id="next-btn" type="button">▶️</button>
+              <button id="next" type="button">▶️</button>
             </div>
           </div>
           <div id="exam-cards"></div>
