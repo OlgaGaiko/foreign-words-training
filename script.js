@@ -1,23 +1,23 @@
 const words = [{
-	word: 'Apple',
-	translation: 'Яблоко',
-	description: 'A round fruit with red or green skin and a whitish inside'
+  word: 'Apple',
+  translation: 'Яблоко',
+  description: 'A round fruit with red or green skin and a whitish inside'
 }, {
-	word: 'Banana',
-	translation: 'Банан',
-	description: 'A long curved fruit that grows in clusters and has soft pulpy flesh and yellow skin when ripe'
+  word: 'Banana',
+  translation: 'Банан',
+  description: 'A long curved fruit that grows in clusters and has soft pulpy flesh and yellow skin when ripe'
 }, {
-	word: 'Orange',
-	translation: 'Апельсин',
-	description: 'A round juicy citrus fruit with a tough bright reddish-yellow rind'
+  word: 'Orange',
+  translation: 'Апельсин',
+  description: 'A round juicy citrus fruit with a tough bright reddish-yellow rind'
 }, {
-	word: 'Pear',
-	translation: 'Груша',
-	description: 'A small, round fruit with a yellowish or greenish-yellow skin and a firm white flesh'
+  word: 'Pear',
+  translation: 'Груша',
+  description: 'A small, round fruit with a yellowish or greenish-yellow skin and a firm white flesh'
 }, {
-	word: 'Strawberry',
-	translation: 'Клубника',
-	description: 'A small, round fruit with a red or yellow skin and a firm white flesh'
+  word: 'Strawberry',
+  translation: 'Клубника',
+  description: 'A small, round fruit with a red or yellow skin and a firm white flesh'
 }];
 
 
@@ -60,30 +60,36 @@ shuffleWords.addEventListener('click', () => {
 let progress = 0;
 
 function showProgress() {
-  document.querySelector('#words-progress').value = progress * 25;
+  const totalWords = currentWords.length;
+  const progress = someCalculationBasedOnTotalWords();
+  document.querySelector('#words-progress').value = (progress / totalWords) * 100;
   document.querySelector('#current-word').textContent = progress + 1;
   makeCard(currentWords[progress]);
 }
 
 nextBtn.addEventListener("click", function () {
-  progress = ++progress;
-  backBtn.disabled = false;
-  if (progress == 4) {
-    nextBtn.disabled = true;
+  if (progress < currentWords.length - 1) {
+    progress++;
+    backBtn.disabled = false;
+    if (progress === currentWords.length - 1) {
+      nextBtn.disabled = true;
+    }
+    showProgress();
   }
-  showProgress();
-})
+});
 
 backBtn.addEventListener("click", function () {
-  progress = --progress;
-  if (progress == 0) {
-    backBtn.disabled = true;
+  if (progress > 0) {
+    progress--;
+    if (progress === 0) {
+      backBtn.disabled = true;
+    }
+    if (progress < currentWords.length - 1) {
+      nextBtn.disabled = false;
+    }
+    showProgress();
   }
-  if (progress < 5) {
-    nextBtn.disabled = false;
-  }
-  showProgress();
-})
+});
 
 const time = document.querySelector("#time");
 let timer;
@@ -127,8 +133,10 @@ function renderExamCard(arr) {
 let examProgress = 0;
 
 function showExamProgress() {
-  document.querySelector('#exam-progress').value = examProgress * 20;
-  document.querySelector('#correct-percent').textContent = examProgress * 20 + `%`;
+  const totalQuestions = examQuestions.length;
+  const progressPercentage = (examProgress / totalQuestions) * 100;
+  document.querySelector('#exam-progress').value = progressPercentage;
+  document.querySelector('#correct-percent').textContent = progressPercentage + '%';
 }
 
 function doTimer() {
@@ -156,18 +164,17 @@ backExm.addEventListener("click", function () {
 
   renderExamCard(doExamDiv(currentWords));
 
-  divExam.addEventListener(("click"), function (event) {
-
-    if (first === null) {
+  divExam.addEventListener("click", function (event) {
+    if (!first) {
       first = event.target;
       first.classList.add('correct');
     } else {
       second = event.target;
     }
 
-    if (first !== null && second !== null) {
-      let firstWord = currentWords.findIndex(el => el.word === first.textContent || el.translation === first.textContent);
-      let secondWord = currentWords.findIndex(el => el.word === second.textContent || el.translation === second.textContent);
+    if (first && second && first !== second) {
+      const firstWord = currentWords.findIndex(el => el.word === first.textContent || el.translation === first.textContent);
+      const secondWord = currentWords.findIndex(el => el.word === second.textContent || el.translation === second.textContent);
 
       if (firstWord === secondWord) {
         second.classList.add('correct');
@@ -175,7 +182,7 @@ backExm.addEventListener("click", function () {
         second.classList.add('fade-out');
         first = null;
         second = null;
-        examProgress = ++examProgress;
+        examProgress++;
         showExamProgress();
       } else {
         second.classList.add('wrong');
@@ -193,7 +200,6 @@ backExm.addEventListener("click", function () {
       setTimeout(function () {
         alert(`Вы успешно прошли тестирование. Время прохождения: ${endTime}`)
       }, 2000);
-
     }
-  })
+  });
 })
